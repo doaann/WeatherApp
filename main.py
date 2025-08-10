@@ -5,12 +5,11 @@ import requests
 from io import BytesIO
 import datetime
 
-# ===== AYARLAR =====
 API_KEY = "7440736a215399e6c35a30f32d716d50"
-BG_IMAGE_URL = "https://i.pinimg.com/736x/8d/96/c3/8d96c31ecb480ba85abd181e09a31e3a.jpg"
-WIDTH, HEIGHT = 600, 600  # Genişliği artırdık
+BG_IMAGE_URL = "https://i.postimg.cc/GtjYrJrc/photo-1520034475321-cbe63696469a.jpg"
 
-# ===== ANA PENCERE =====
+WIDTH, HEIGHT = 650, 600
+
 pencere = tk.Tk()
 pencere.title("Hava Durumu Uygulaması")
 pencere.geometry(f"{WIDTH}x{HEIGHT}")
@@ -36,31 +35,47 @@ canvas.create_window(WIDTH // 2 - 40, 30, window=sehir_entry, width=200, height=
 buton = tk.Button(pencere, text="Getir", font=("Arial", 12), command=lambda: getir_hava(sehir_entry.get()))
 canvas.create_window(WIDTH // 2 + 130, 30, window=buton, width=60, height=30)
 
-sicaklik_label = tk.Label(pencere, font=("Arial", 48, "bold"), fg="white", bg="#222222")
-canvas.create_window(WIDTH - 100, 100, window=sicaklik_label, width=120)
+main_frame = tk.Frame(pencere, bg="#222222")
+canvas.create_window(WIDTH - 140, 110, window=main_frame)
+
+sicaklik_label = tk.Label(main_frame, font=("Arial", 48, "bold"), fg="white", bg="#222222")
+sicaklik_label.pack(side="left")
+
+gunduz_label = tk.Label(main_frame, text="Gündüz", font=("Arial", 16, "bold"), fg="white", bg="#222222")
+gunduz_label.pack(side="left", padx=(10, 0))
 
 aciklama_label = tk.Label(pencere, font=("Arial", 16), fg="white", bg="#222222")
-canvas.create_window(120, 100, window=aciklama_label, width=200)
+canvas.create_window(120, 110, window=aciklama_label, width=200)
 
 ikon_label = tk.Label(pencere, bg="#222222")
-canvas.create_window(WIDTH // 2, 170, window=ikon_label)
+canvas.create_window(WIDTH // 2, 200, window=ikon_label)
 
 forecast_frames = []
-for i in range(5):
-    frame = tk.Frame(pencere, bg="#222222", bd=2, relief="ridge")
-    canvas.create_window(70 + i * 110, HEIGHT - 110, window=frame, width=100, height=150)  # Yüksekliği 150 yaptık
+frame_width = 95
+frame_height = 160
+left_margin = 40
+space_between = 12
+bottom_y = HEIGHT - 120
 
-    gun_label = tk.Label(frame, text="", font=("Arial", 11, "bold"), fg="white", bg="#222222")
-    gun_label.pack(pady=(6, 2))
+for i in range(5):
+    if i == 0:
+        x_pos = left_margin + 70  # sola ekstra 20 px boşluk
+    else:
+        x_pos = left_margin + 70 + i * (frame_width + space_between)
+    frame = tk.Frame(pencere, bg="#222222", bd=2, relief="ridge")
+    canvas.create_window(x_pos, bottom_y, window=frame, width=frame_width, height=frame_height, anchor="center")
+
+    gun_label = tk.Label(frame, text="", font=("Arial", 12, "bold"), fg="white", bg="#222222")
+    gun_label.pack(pady=(8, 5))
 
     ikon_label_f = tk.Label(frame, bg="#222222")
-    ikon_label_f.pack(pady=8)
+    ikon_label_f.pack(pady=(2, 8))
 
-    sicaklik_label_f = tk.Label(frame, font=("Arial", 9), fg="white", bg="#222222")
-    sicaklik_label_f.pack(pady=(2, 8))
+    sicaklik_label_f = tk.Label(frame, font=("Arial", 10), fg="white", bg="#222222")
+    sicaklik_label_f.pack(pady=(2, 5))
 
-    temp_label = tk.Label(frame, font=("Arial", 9), fg="white", bg="#222222")
-    temp_label.pack(pady=(2, 8))
+    temp_label = tk.Label(frame, font=("Arial", 10), fg="white", bg="#222222", wraplength=frame_width - 20, justify="center")
+    temp_label.pack(pady=(2, 5))
 
     forecast_frames.append({
         "gun": gun_label,
@@ -157,6 +172,6 @@ def getir_hava(sehir):
 
     except Exception as e:
         messagebox.showerror("Hata", f"Veri alınamadı: {e}")
-
+aciklama_label.config(font=("Arial", 20))
 
 pencere.mainloop()
