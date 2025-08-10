@@ -59,7 +59,7 @@ bottom_y = HEIGHT - 120
 
 for i in range(5):
     if i == 0:
-        x_pos = left_margin + 70  # sola ekstra 20 px boşluk
+        x_pos = left_margin + 70  # alttaki labellar sola kaydığı için güncelleme yaptım
     else:
         x_pos = left_margin + 70 + i * (frame_width + space_between)
     frame = tk.Frame(pencere, bg="#222222", bd=2, relief="ridge")
@@ -172,6 +172,7 @@ def getir_hava(sehir):
 
     except Exception as e:
         messagebox.showerror("Hata", f"Veri alınamadı: {e}")
-aciklama_label.config(font=("Arial", 20))
+
+aciklama_label.config(font=("Arial", 20)) # soldaki label biraz küçük diye güncelliyorum!
 
 pencere.mainloop()
